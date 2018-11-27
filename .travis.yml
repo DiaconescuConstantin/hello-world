@@ -1,0 +1,18 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t diaconescu/hello-world -f Dockerfile.dev .
+
+script:
+  - docker run diaconescu/hello-world yarn test:unit
+
+after_success:
+  - docker build -t diaconescu/hello-world .
+
+deploy:
+  provider: script
+  script: bash docker_push
+  on:
+    branch: master
